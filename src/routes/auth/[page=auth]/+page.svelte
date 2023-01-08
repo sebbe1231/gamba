@@ -2,8 +2,6 @@
     import { page } from "$app/stores";
     import Login from "$lib/components/auth/login.svelte";
     import Register from "$lib/components/auth/register.svelte";
-    
-    $: console.log()
 </script>
 
 <div class="container mt-4">
@@ -27,11 +25,3 @@
         </div>
     </div>
 </div>
-
-<!-- {#if $page.params.page === "login"}
-    Login
-    <a href="register">Register</a>
-{:else}
-    Register
-    <a href="login">Login</a>
-{/if} -->

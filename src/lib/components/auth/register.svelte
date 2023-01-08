@@ -30,7 +30,11 @@
             return;
         }
 
-        window.localStorage.setItem("token", data.token)
+        window.localStorage.removeItem("token")
+        window.localStorage.setItem("token", data.data.token)
+
+        window.location.replace("/panel")
+        
         toast.fire({
             text: "Account created!",
             icon: "success",

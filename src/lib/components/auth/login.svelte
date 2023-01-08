@@ -29,7 +29,11 @@
             })
         }
 
-        window.localStorage.setItem("token", data.token)
+        window.localStorage.removeItem("token")
+        window.localStorage.setItem("token", data.data.token)
+
+        window.location.replace("/panel")
+
         return toast.fire({
             text: "Logged in!",
             icon: "success"
