@@ -16,7 +16,7 @@
             method: "POST",
             body: JSON.stringify({
                 name: name,
-                password: password,
+                password: password
             }),
         });
 
@@ -24,7 +24,7 @@
 
         if (!data.success) {
             toast.fire({
-                text: `Failed; ${data.message}`,
+                text: `Failed: ${data.message}`,
                 icon: "error",
             });
             return;

@@ -15,7 +15,7 @@ export const POST: RequestHandler = async ({ request }) => {
     })
 
     if (!user) {
-        return failed("Wrong username or password")
+        return failed("Wrong username")
     }
 
     const token = jwt.sign({id: user?.id, name: user?.name}, JWT_SECRET)

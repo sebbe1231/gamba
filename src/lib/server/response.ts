@@ -1,7 +1,7 @@
 export const failed = (msg: string, status = 400) => {
     return new Response(JSON.stringify({
         success: false,
-        message: "User already exists"
+        message: msg
     }), {
         headers: {
             "content-type": "application/json"
