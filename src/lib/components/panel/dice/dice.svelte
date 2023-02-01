@@ -1,19 +1,32 @@
-<script>
+<script lang="ts">
+
+
     let bet = 0;
 
     const roll = async () => {
+        const quess = document.querySelector('input[name="btnradio"]:checked')?.getAttribute('value')
+
         const resp = await fetch("/api/game/dice", {
             method: "POST",
             body: JSON.stringify({
-                guess: document.querySelector('input[name="btnradio"]:checked')?.getAttribute('value'),
+                guess: quess,
                 bet: bet
-            }),
-        },
-        )
+            })
+        })
+
+        const data = await resp.json();
+
+        const dice_img = document.getElementById("dice-img")!
+        dice_img.setAttribute('src', `/dice_${data.data.num}.png`)
+        
+        console.log(data)
     }
 </script>
 
-<div class="row align-items-end justify-content-center">
+<div class="row justify-content-center">
+    <div class="text-center" style="display: block;">
+        <img id="dice-img" src="/dice_1.png" alt="Dice face">
+    </div>
     <div class="col-12 col-md-6 mt-4">
         <h5 class="text-center">Choose dice face</h5>
         <div class="btn-group" style="width: 100%;" role="group">

@@ -9,10 +9,10 @@ export const failed = (msg: string, status = 400) => {
     })
 }
 
-export const success = (data: any = null, status = 200) => {
+export const success = (data: any = null, msg: any = null, status = 200) => {
     return new Response(JSON.stringify({
         success: true,
-        message: null,
+        message: msg,
         data
     }), {
         headers: {
