@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { api } from "$lib/utils/api";
     import Swal from "sweetalert2";
     export let name = "";
     export let password = "";
@@ -12,25 +13,22 @@
     });
 
     const login = async () => {
-        const resp = await fetch("/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify({
+        const resp = await api("auth/login", {
+            body: {
                 name: name,
                 password: password
-            })
+            }
         })
-        
-        const data = await resp.json();
 
-        if (!data.success){
+        if (!resp.success){
             return toast.fire({
-                text: `Failed: ${data.message}`,
+                text: `Failed: ${resp.message}`,
                 icon: "error"
             })
         }
 
         window.localStorage.removeItem("token")
-        window.localStorage.setItem("token", data.data.token)
+        window.localStorage.setItem("token", resp.data.token)
 
         window.location.replace("/panel")
 

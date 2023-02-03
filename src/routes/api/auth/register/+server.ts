@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { failed, success } from '$lib/server/response';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '$env/static/private';
+import { userTokenDecoded, type User } from '$lib/stores';
 
 export const POST: RequestHandler = async ({ request }) => {
     let req = await request.json()
@@ -17,6 +18,9 @@ export const POST: RequestHandler = async ({ request }) => {
                 stats: {
                     create: {}
                 }
+            },
+            include: {
+                stats: true
             }
         })
     }
@@ -27,7 +31,11 @@ export const POST: RequestHandler = async ({ request }) => {
             }
         }
     }
-    const token = jwt.sign({id: user?.id, name: user?.name}, JWT_SECRET)
+    const token = jwt.sign({id: user?.id, name: user?.name, money: user?.stats?.money}, JWT_SECRET)
+
+    const decoded = jwt.verify(token, JWT_SECRET)
+
+    userTokenDecoded.set(decoded as User)
 
     return success({token});
 }

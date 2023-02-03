@@ -1,15 +1,14 @@
 <script lang="ts">
+    import { userTokenDecoded } from "$lib/stores";
     import { onMount } from "svelte";
+    import { api } from "$lib/utils/api";
 
     onMount(async () => {
-        const resp = await fetch("/api/user/get_store", {
-            method: "GET",
-        });
+        const resp = await api("user/get_user", {
+            method: "GET"
+        })
 
-        const data = await resp.json();
-        console.log(data)
-
-        document.getElementById("username-text")!.textContent = data.data.user.name
+        console.log(resp)
     })
 </script>
 
@@ -34,7 +33,10 @@
                 <a class="nav-link mx-2" href="/panel/dice">Dice</a>
             </div>
         </div>
-        <span id="username-text" class="text-white">USERNAME</span>
+        <div class="row">
+            <span id="username-text" class="text-white col-12">{$userTokenDecoded?.name}</span>
+            <span id="money-text" class="text-white col-12">{$userTokenDecoded?.money}</span>
+        </div>
         <button type="button" id="logoutbtn" class="mx-2 btn btn-danger">logout</button>
     </div>
 </nav>

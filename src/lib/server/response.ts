@@ -1,3 +1,9 @@
+export interface APIResponse {
+    success: boolean;
+    message: string | null;
+    data?: any;
+}
+
 export const failed = (msg: string, status = 400) => {
     return new Response(JSON.stringify({
         success: false,

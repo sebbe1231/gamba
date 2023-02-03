@@ -11,12 +11,12 @@ datasource db {
 }
 
 model Stats {
-  id     Int  @id @default(autoincrement())
-  money  Int  @default(500)
-  won    Int  @default(0)
-  lost   Int  @default(0)
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int  @unique
+  id     Int   @id @default(autoincrement())
+  money  Float @default(500)
+  won    Int   @default(0)
+  lost   Int   @default(0)
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int   @unique
 }
 
 // 
