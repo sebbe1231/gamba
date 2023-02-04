@@ -11,13 +11,11 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!token) {
         return failed("Unauthorized", 401)
     }
-    console.log(token)
 
     let decoded;
 
     try {
         decoded = jwt.verify(token, JWT_SECRET)
-        console.log(decoded)
     } catch (err) {
         console.log(err)
         return failed("No/wrong token")
@@ -61,7 +59,6 @@ export const POST: RequestHandler = async ({ request }) => {
             }
         })
         decoded.money = money!.money + req.bet*2
-        console.log(decoded)
         return success({num, decoded}, `Dice rolled ${num}. You won $${req.bet*4}!`)
     }
     
@@ -74,6 +71,5 @@ export const POST: RequestHandler = async ({ request }) => {
         }
     })
     decoded.money = money!.money - req.bet
-    console.log(decoded)
     return success({num, decoded}, `Dice rolled ${num}. You lost $${req.bet}.`)
 }

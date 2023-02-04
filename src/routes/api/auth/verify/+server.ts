@@ -29,8 +29,6 @@ export const POST: RequestHandler = async ({ request }) => {
     })
 
     decoded.money = money!.money
-    const token = jwt.sign(decoded, JWT_SECRET)
-    decoded = jwt.verify(token, JWT_SECRET)
 
     return success({decoded});
 }

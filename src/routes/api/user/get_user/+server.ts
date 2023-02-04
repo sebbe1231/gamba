@@ -10,13 +10,11 @@ export const GET: RequestHandler = async ({ request }) => {
     if (!token) {
         return failed("Unauthorized", 401)
     }
-    console.log(token)
 
     let decoded;
 
     try {
         decoded = jwt.verify(token, JWT_SECRET)
-        console.log(decoded)
     } catch (err) {
         console.log(err)
         return failed("No/wrong token")
