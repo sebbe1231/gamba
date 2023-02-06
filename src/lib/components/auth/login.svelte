@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { userTokenDecoded } from "$lib/stores";
     import { api } from "$lib/utils/api";
     import Swal from "sweetalert2";
     export let name = "";
@@ -29,8 +31,9 @@
 
         window.localStorage.removeItem("token")
         window.localStorage.setItem("token", resp.data.token)
+        $userTokenDecoded = resp.data.store
 
-        window.location.replace("/panel")
+        goto("/panel")
 
         return toast.fire({
             text: "Logged in!",

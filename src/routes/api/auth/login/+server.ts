@@ -19,14 +19,16 @@ export const POST: RequestHandler = async ({ request }) => {
     })
 
     if (!user) {
-        return failed("Wrong username")
+        return failed("Wrong username or password")
     }
 
-    const token = jwt.sign({id: user?.id, name: user?.name, money: user.stats?.money}, JWT_SECRET)
+    const token = jwt.sign({id: user?.id, name: user?.name}, JWT_SECRET)
 
-    let decoded = jwt.verify(token, JWT_SECRET)
-    
-    userTokenDecoded.set(decoded as User)
+    const store = {
+        id: user?.id,
+        name: user?.name,
+        money: user?.stats?.money
+    }
 
-    return success({token})
+    return success({token, store})
 }

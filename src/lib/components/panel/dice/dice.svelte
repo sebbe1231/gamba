@@ -1,10 +1,12 @@
 <script lang="ts">
     import { api } from "$lib/utils/api";
     import { userTokenDecoded } from "$lib/stores";
+    import Swal from "sweetalert2";
 
     let bet = 0,
-        checked = 1,
-        isInvalid: boolean;
+        checked = 0,
+        isInvalid: boolean,
+        diceImgURL: string = "/dice_1.png";
     
     
     $: isInvalid = bet <= 0;
@@ -17,20 +19,42 @@
             },
         });
 
-        const dice_img = document.getElementById("dice-img")!;
-        dice_img.setAttribute("src", `/dice_${resp.data.num}.png`);
+        if (resp.success === false){
+            return Swal.fire({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                text: `Failed: ${resp.message}`,
+                icon: "error"
+            });
+        }
 
-        console.log(resp);
+        document.getElementById("diceText")!.textContent = "Rolling..."
 
-        console.log(resp.data.decoded);
+        for (let i = 0; i < 20; i++) {
+            diceImgURL = `/dice_${Math.floor(Math.random() * 6 + 1)}.png`
+            await new Promise(r => setTimeout(r, 10*i+50));
+        }
+        
+        diceImgURL = `/dice_${resp.data.num}.png`
+        document.getElementById("diceText")!.textContent = resp.message
 
-        $userTokenDecoded = resp.data.decoded;
+        $userTokenDecoded = resp.data.store;
     };
 </script>
 
 <div class="row justify-content-center">
     <div class="text-center" style="display: block;">
-        <img id="dice-img" src="/dice_1.png" alt="Dice face" />
+        <img id="dice-img" src={diceImgURL} alt="Dice face" />
+    </div>
+    <div class="row justify-content-center">
+        <div class="card col-4">
+            <div class="card-body text-center" id="diceText">
+                Let the dice decide!
+            </div>
+        </div>
     </div>
     <div class="col-12 col-md-6 mt-4">
         <h5 class="text-center">Choose dice face</h5>

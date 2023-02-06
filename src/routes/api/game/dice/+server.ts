@@ -5,6 +5,7 @@ import { JWT_SECRET } from '$env/static/private';
 import jwt from 'jsonwebtoken';
 
 export const POST: RequestHandler = async ({ request }) => {
+    const weight = 3;
     const req = await request.json()
     const token = request.headers.get("Authorization")?.split("Bearer ")[1]
     
@@ -25,17 +26,25 @@ export const POST: RequestHandler = async ({ request }) => {
         return failed("Invalid JWT data");
     }
 
+    if (req.guess < 1 || req.guess > 6) {
+        return failed("Invalid guess");
+    }
 
-    const money = await prisma.stats.findFirst({
+    if (req.bet <= 0){
+        return failed("Invalid bet amount");
+    }
+
+
+    const user = await prisma.user.findFirst({
         where: {
-            userId: decoded.id
+            id: decoded.id
         },
-        select: {
-            money: true
+        include: {
+            stats: true
         }
     })
 
-    if (Number(req.bet) > money!.money!){
+    if (Number(req.bet) > user?.stats?.money!){
         return failed(`User does not have $${req.bet}`)
     }
     
@@ -46,30 +55,44 @@ export const POST: RequestHandler = async ({ request }) => {
         crypto.getRandomValues(array);
     }
 
-    const guess = Number(req.guess)
     const num = array[0] % 6 + 1;
 
-    if (guess === num){
-        await prisma.stats.update({
-            where: {
-                userId: decoded.id
-            },
-            data: {
-                money: money!.money + req.bet*2
-            }
-        })
-        decoded.money = money!.money + req.bet*2
-        return success({num, decoded}, `Dice rolled ${num}. You won $${req.bet*4}!`)
+    let newMoney;
+    let msg;
+    let newData
+
+    if (Number(req.guess) === num){
+        newMoney = user?.stats?.money! + req.bet*weight - req.bet;
+        msg = `Dice rolled ${num}. You won $${req.bet*weight}!`;
+        newData = {
+            money: newMoney,
+            won: user?.stats?.won! + 1,
+            deposit: user?.stats?.deposit + req.bet,
+            winnings: user?.stats?.winnings! + req.bet*weight
+        }
+    }
+    else {
+        newMoney = user?.stats?.money! - req.bet;
+        msg = `Dice rolled ${num}. You lost $${req.bet}.`;
+        newData = {
+            money: newMoney,
+            lost: user?.stats?.lost! + 1,
+            deposit: user?.stats?.deposit + req.bet,
+        }
     }
     
     await prisma.stats.update({
         where: {
             userId: decoded.id
         },
-        data: {
-            money: money!.money - req.bet
-        }
+        data: newData
     })
-    decoded.money = money!.money - req.bet
-    return success({num, decoded}, `Dice rolled ${num}. You lost $${req.bet}.`)
+
+    const store = {
+        id: user?.id,
+        name: user?.name,
+        money: newMoney
+    }
+
+    return success({num, store}, msg)
 }

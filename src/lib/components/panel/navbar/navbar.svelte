@@ -2,6 +2,7 @@
     import { userTokenDecoded } from "$lib/stores";
     import { onMount } from "svelte";
     import { api } from "$lib/utils/api";
+    import { goto } from "$app/navigation";
 
     onMount(async () => {
         const resp = await api("user/get_user", {
@@ -10,6 +11,12 @@
 
         console.log(resp)
     })
+
+    const logout = async () => {
+        goto("/auth/login")
+        window.localStorage.removeItem("token")
+        $userTokenDecoded = null
+    }
 </script>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -37,6 +44,6 @@
             <span id="username-text" class="text-white col-12">{$userTokenDecoded?.name}</span>
             <span id="money-text" class="text-white col-12">{$userTokenDecoded?.money}</span>
         </div>
-        <button type="button" id="logoutbtn" class="mx-2 btn btn-danger">logout</button>
+        <button type="button" id="logoutbtn" class="mx-2 btn btn-danger" on:click={logout}>logout</button>
     </div>
 </nav>

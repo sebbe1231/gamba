@@ -2,20 +2,19 @@
     import { userTokenDecoded } from "$lib/stores";
     import { onMount } from "svelte";
     import { api } from "$lib/utils/api";
+    import { goto } from "$app/navigation";
     
 
 
     onMount(async () => {
         const resp = await api("auth/verify", {
-            body: {
-                token: window.localStorage.getItem("token")
-            }
+            method: "GET"
         })
 
-        userTokenDecoded.set(resp.data.decoded)
-        
         if (resp.success === false){
-            window.location.replace("/auth/login")
+            goto("/auth/login")
         }
+
+        userTokenDecoded.set(resp.data.store)
     })
 </script>

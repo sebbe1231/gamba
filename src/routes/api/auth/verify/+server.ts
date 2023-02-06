@@ -4,13 +4,17 @@ import jwt from 'jsonwebtoken';
 import { failed, success } from '$lib/server/response';
 import prisma from '$lib/server/prisma';
 
-export const POST: RequestHandler = async ({ request }) => {
-    let req = await request.json()
+export const GET: RequestHandler = async ({ request }) => {
+    const token = request.headers.get("Authorization")?.split("Bearer ")[1]
+
+    if (!token) {
+        return failed("Unauthorized", 401)
+    }
 
     let decoded;
 
     try {
-        decoded = jwt.verify(req.token, JWT_SECRET)
+        decoded = jwt.verify(token, JWT_SECRET)
     } catch (err) {
         return failed("No/wrong token")
     }
@@ -19,16 +23,25 @@ export const POST: RequestHandler = async ({ request }) => {
         return failed("Invalid JWT data");
     }
 
-    const money = await prisma.stats.findFirst({
+    const user = await prisma.user.findFirst({
         where: {
-            userId: decoded.id
+            id: decoded.id,
+            name: decoded.name
         },
-        select: {
-            money: true
+        include: {
+            stats: true
         }
     })
 
-    decoded.money = money!.money
+    if (!user){
+        return failed("No/wrong token")
+    }
 
-    return success({decoded});
+    const store = {
+        id: user?.id,
+        name: user?.name,
+        money: user?.stats?.money
+    }
+
+    return success({token, store});
 }

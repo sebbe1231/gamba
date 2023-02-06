@@ -31,11 +31,13 @@ export const POST: RequestHandler = async ({ request }) => {
             }
         }
     }
-    const token = jwt.sign({id: user?.id, name: user?.name, money: user?.stats?.money}, JWT_SECRET)
+    const token = jwt.sign({id: user?.id, name: user?.name}, JWT_SECRET)
 
-    const decoded = jwt.verify(token, JWT_SECRET)
+    const store = {
+        id: user?.id,
+        name: user?.name,
+        money: user?.stats?.money
+    }
 
-    userTokenDecoded.set(decoded as User)
-
-    return success({token});
+    return success({token, store});
 }
