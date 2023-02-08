@@ -17,6 +17,10 @@
         window.localStorage.removeItem("token")
         $userTokenDecoded = null
     }
+
+    const profile = async () => {
+        goto(`user/${$userTokenDecoded?.id}`)
+    }
 </script>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -41,8 +45,16 @@
             </div>
         </div>
         <div class="row">
-            <span id="username-text" class="text-white col-12">{$userTokenDecoded?.name}</span>
-            <span id="money-text" class="text-white col-12">{$userTokenDecoded?.money}</span>
+            {#if $userTokenDecoded?.name == undefined}
+                <div class="col-12">
+                    <div class="spinner-border text-light" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            {:else}
+                <span id="username-text" class="text-white col-12" style="cursor: pointer;" on:click={profile} on:keypress={profile}>{$userTokenDecoded?.name}</span>
+                <span id="money-text" class="text-white col-12">${$userTokenDecoded?.money}</span>
+            {/if}
         </div>
         <button type="button" id="logoutbtn" class="mx-2 btn btn-danger" on:click={logout}>logout</button>
     </div>
