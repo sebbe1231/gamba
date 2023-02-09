@@ -7,7 +7,11 @@
 </script>
 
 <div class="container mt-4">
-    {#if Number.isNaN(Number($page.params.slug))}
+    {#if $userTokenDecoded === null}
+        <div class="spinner-border" style="display: block; margin-left: auto; margin-right: auto;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    {:else if Number.isNaN(Number($page.params.slug))}
         Not valid id
     {:else if $userTokenDecoded?.id === Number($page.params.slug)}
         <ThisUser />
