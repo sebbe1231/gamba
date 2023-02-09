@@ -19,7 +19,7 @@
     }
 
     const profile = async () => {
-        goto(`user/${$userTokenDecoded?.id}`)
+        goto(`/panel/user/${$userTokenDecoded?.id}`)
     }
 </script>
 

@@ -21,12 +21,24 @@ model Stats {
   userId   Int   @unique
 }
 
+model UserSettings {
+  id            Int     @id @default(autoincrement())
+  showWonLost   Boolean @default(false)
+  showWinnings  Boolean @default(false)
+  showDeposit   Boolean @default(false)
+  showWinback   Boolean @default(false)
+  showCreatedAt Boolean @default(true)
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int     @unique
+}
+
 // 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  stats     Stats?
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  stats        Stats?
+  userSettings UserSettings?
 }

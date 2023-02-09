@@ -17,6 +17,9 @@ export const POST: RequestHandler = async ({ request }) => {
                 password: req.password,
                 stats: {
                     create: {}
+                },
+                userSettings: {
+                    create: {}
                 }
             },
             include: {

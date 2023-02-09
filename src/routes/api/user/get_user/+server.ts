@@ -30,6 +30,7 @@ export const GET: RequestHandler = async ({ request }) => {
         },
         include: {
             stats: true,
+            userSettings: true
         }
     })
 
