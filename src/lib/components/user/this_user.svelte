@@ -37,6 +37,7 @@
 {:else}
 
 <h2 class="text-center">{$user?.name}</h2>
+<h3 class="text-center">${$user.stats.money}</h3>
 <div class="row">
     <div class="col-12 col-md-4">
         <div class="card">
@@ -59,7 +60,12 @@
                 Games played
             </div>
             <div class="card-body">
-                <h5>lol</h5>
+                <h5>Total</h5>
+                <p>{$user.stats.won + $user.stats.lost}</p>
+                <h5>Won</h5>
+                <p>{$user.stats.won}</p>
+                <h5>Lost</h5>
+                <p>{$user.stats.lost}</p>
             </div>
         </div>
     </div>
@@ -69,7 +75,12 @@
                 Winnings
             </div>
             <div class="card-body">
-                <h5>lol</h5>
+                <h5>Win Back</h5>
+                <p>{$user.stats.winnings - $user.stats.deposit}</p>
+                <h5>Deposited</h5>
+                <p>{$user.stats.deposit}</p>
+                <h5>Winnings</h5>
+                <p>{$user.stats.winnings}</p>
             </div>
         </div>
     </div>
