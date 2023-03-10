@@ -42,6 +42,7 @@
             <div class="navbar-nav">
                 <a class="nav-link mx-2" href="/panel">Home</a>
                 <a class="nav-link mx-2" href="/panel/dice">Dice</a>
+                <a class="nav-link mx-2" href="/panel/blackjack">Blackjack</a>
             </div>
         </div>
         <div class="row">

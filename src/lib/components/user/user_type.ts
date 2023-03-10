@@ -2,7 +2,6 @@ export interface DetailedUser {
     id: number;
     name: string;
     createdAt: string;
-    money: number;
     stats: {
         id: number;
         money: number;

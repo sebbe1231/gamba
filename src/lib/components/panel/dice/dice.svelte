@@ -6,10 +6,12 @@
     let bet = 0,
         checked = 0,
         isInvalid: boolean,
+        btnDisabled: boolean,
         diceImgURL: string = "/dice_1.png";
     
     
     $: isInvalid = bet <= 0;
+    $: btnDisabled = bet <= 0;
 
     const roll = async () => {
         const resp = await api("game/dice", {
@@ -31,6 +33,8 @@
             });
         }
 
+        btnDisabled = true;
+
         document.getElementById("diceText")!.textContent = "Rolling..."
 
         for (let i = 0; i < 20; i++) {
@@ -42,6 +46,8 @@
         document.getElementById("diceText")!.textContent = resp.message
 
         $userTokenDecoded = resp.data.store;
+
+        btnDisabled = bet <= 0;
     };
 </script>
 
@@ -135,7 +141,7 @@
             type="submit"
             style="width: 100%;"
             class="btn btn-success"
-            class:disabled={isInvalid}
+            class:disabled={btnDisabled}
             on:click={roll}>ROLL</button
         >
     </div>

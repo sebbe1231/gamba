@@ -7,6 +7,12 @@
             <img class="img-fluid rounded" src="/dice.png" alt="dice" />
             <span>Dice!</span>
         </a>
+
+        <!-- Blackjack -->
+        <a class="col-12 col-md-3 img_container" href="/panel/blackjack">
+            <img class="img-fluid rounded" src="/blackjack.png" alt="blackjack" />
+            <span>Blackjack!</span>
+        </a>
     </div>
 </div>
 
